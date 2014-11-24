@@ -8,7 +8,7 @@ game.PlayerEntity = me.Entity.extend({
                 width: 128,
                 height: 128,
                 getShape: function() {
-                    return(new me.Rect(0, 0, 128, 128)).toPolygon();
+                    return(new me.Rect(0, 0, 30, 128)).toPolygon();
                 }
             }]);
 
@@ -42,7 +42,7 @@ game.PlayerEntity = me.Entity.extend({
             this.renderable.setCurrentAnimation("idle");
         }
 
-             
+
 
         this._super(me.Entity, "update", [delta]);
         return true;
