@@ -18,6 +18,7 @@ game.PlayerEntity = me.Entity.extend({
         this.renderable.setCurrentAnimation("idle");
 
         this.body.setVelocity(5, 20);
+        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
     update: function(delta) {
 
@@ -58,6 +59,7 @@ game.PlayerEntity = me.Entity.extend({
 
         this._super(me.Entity, "update", [delta]);
         return true;
+     
     },
     
     collideHandler: function(response) {
@@ -67,7 +69,7 @@ game.PlayerEntity = me.Entity.extend({
         if (response.b.type === 'badguy') {
            if(ydif <= -115) {
                response.b.alive = false;
-            }else{
+            }else if(response.b.alive){
         me.state.change(me.state.MENU);
             }
         }
