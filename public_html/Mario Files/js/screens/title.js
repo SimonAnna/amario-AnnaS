@@ -3,17 +3,19 @@ game.TitleScreen = me.ScreenObject.extend({
      *  action to perform on state change
      */
     onResetEvent: function() {
-        var titleImage = new me.Sprite(0, 0, me.loader.getImage("title-screen"));
+        var titleImage = new me.Sprite(0, 0, me.loader.getImage("title"));
         me.game.world.addChild(titleImage, -10);
         me.input.bindKey(me.input.KEY.ENTER, "start");
 
         me.game.world.addChild(new (me.Renderable.extend({
             init: function() {
                 this._super(me.Renderable, 'init', [510, 30, me.game.viewport.width, me.game.viewport.height]);
-                this.font = new me.Font("Arial", 46, "white");
+                this.font = new me.Font("Comic Sans MS", 60, "red");
             },
             draw: function(renderer) {
-                this.font.draw(renderer.getContext(), "Marioish", 540, 130);
+                this.font.draw(renderer.getContext(), " LEGEND OF SUPER SONIC BROS.", 20, 130);
+                this.font.draw(renderer.getContext(), "WORLD 64 FOR SEGA GENISIS", 20, 200);
+                this.font.draw(renderer.getContext(), "*NOW WITH IMORTAL COMBAT*", 20, 400);
                 this.font.draw(renderer.getContext(), "Press ENTER to begin", 250, 530);
             }
         })));
