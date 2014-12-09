@@ -13,11 +13,16 @@ game.PlayerEntity = me.Entity.extend({
             }]);
 
         this.renderable.addAnimation("idle", [3]);
+        this.renderable.addAnimation("bigIdle", [0]);
         this.renderable.addAnimation("smallWalk", [8, 9, 10, 11, 12, 13], 80);
+         this.renderable.addAnimation("bigWalk", [14, 15, 16, 17, 18, 19], 80);
+          this.renderable.addAnimation("shrink", [0, 1, 2, 3], 20);
+           this.renderable.addAnimation("grow", [4, 5, 6, 7], 20);
 
         this.renderable.setCurrentAnimation("idle");
 
-        this.body.setVelocity(5, 20);
+        this.big=false
+        this.body.setVelocity(6, 20);
         me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH);
     },
     update: function(delta) {
@@ -40,12 +45,17 @@ game.PlayerEntity = me.Entity.extend({
         }
 
         }
+        if (me.input.isKeyPressed("space")) {   
+         this.body.setVelocity(10, 20);
+        }else{ this.body.setVelocity(6, 20);}
+        
+        
 
         me.collision.check(this, true, this.collideHandler.bind(this), true);
         this.body.update(delta);
         
 
-
+       if(!this.big){
         if (this.body.vel.x !== 0) {
             if (!this.renderable.isCurrentAnimation("smallWalk")) {
                 this.renderable.setCurrentAnimation("smallWalk");
@@ -54,8 +64,17 @@ game.PlayerEntity = me.Entity.extend({
         } else {
             this.renderable.setCurrentAnimation("idle");
         }
+    }else{
+             if (this.body.vel.x !== 0) {
+            if (!this.renderable.isCurrentAnimation("bigWalk")) {
+                this.renderable.setCurrentAnimation("bigWalk");
+                this.renderable.setAnimationFrame();
+            }
+        } else {
+            this.renderable.setCurrentAnimation("bigIdle");
+        }
+    }
 
-        console.log(this.body.vel.x);
 
         this._super(me.Entity, "update", [delta]);
         return true;
@@ -69,11 +88,22 @@ game.PlayerEntity = me.Entity.extend({
         if (response.b.type === 'badguy') {
            if(ydif <= -115) {
                response.b.alive = false;
-            }else if(response.b.alive){
+            }else{
+             if(this.big){
+                    this.big = false;
+                    this.body.vel.y -=this.body.accel.y * me.timer.tick;
+                    this.renderable.setCurrentAnimation("shrink", "smallIdle");
+                     this.renderable.setAnimationFrame();
+                }else{
         me.state.change(me.state.MENU);
-            }
-        }
     }
+            }
+        }else if(response.b.type === 'mushroom'){
+             this.renderable.setCurrentAnimation("grow", "smallIdle");
+            this.big = true;
+             me.game.world.removeChild(response.b);
+    }
+}
 
 });
 
@@ -124,7 +154,7 @@ game.BadGuy = me.Entity.extend({
         this.renderable.addAnimation("run", [0, 1, 2], 80);
         this.renderable.setCurrentAnimation("run");
 
-        this.body.setVelocity(0, 6);
+        this.body.setVelocity(4, 6);
 
 
     },
@@ -152,4 +182,22 @@ game.BadGuy = me.Entity.extend({
         
     }
 
+});
+
+game.Mushroom = me.Entity.extend({
+    init: function(x, y, settings) {
+        this._super(me.Entity, 'init', [x, y, {
+                image: "mushroom",
+                spritewidth: "64",
+                spriteheight: "64",
+                width: 64,
+                height: 64,
+                getShape: function() {
+                    return(new me.Rect(0, 0, 64, 64)).toPolygon();
+                }
+            }]);
+        
+        me.collision.check(this);
+        this.type ="mushroom";
+    }
 });

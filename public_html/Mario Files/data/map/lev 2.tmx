@@ -45,4 +45,7 @@
   <object name="BadGuy" x="692" y="488" width="202" height="70"/>
   <object name="BadGuy" x="964" y="488" width="138" height="68"/>
  </objectgroup>
+ <objectgroup name="CollectableEntities">
+  <object name="Mushroom" x="208" y="494" width="62" height="62"/>
+ </objectgroup>
 </map>
