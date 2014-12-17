@@ -1,4 +1,5 @@
 //player1
+
 game.PlayerEntity = me.Entity.extend({
     init: function(x, y, settings) {
         this._super(me.Entity, 'init', [x, y, {
@@ -51,7 +52,7 @@ game.PlayerEntity = me.Entity.extend({
         }
         //run...OR YOU DIE
         if (me.input.isKeyPressed("space")) {
-            this.body.setVelocity(10, 20);
+            this.body.setVelocity(20, 20);
         } else {
             this.body.setVelocity(6, 20);
         }
@@ -93,7 +94,7 @@ game.PlayerEntity = me.Entity.extend({
         console.log(ydif);
 
         if (response.b.type === 'badguy') {
-            if (ydif <= -100) {
+            if (ydif <= -100.5) {
                 response.b.alive = false;
             } else {
                 if (this.big) {
@@ -101,7 +102,7 @@ game.PlayerEntity = me.Entity.extend({
                     this.body.vel.y -= this.body.accel.y * me.timer.tick;
                     this.renderable.setCurrentAnimation("shrink", "smallIdle");
                     this.renderable.setAnimationFrame();
-                } else {
+                } else if(response.b.alive){
                     //changes state
                     me.state.change(me.state.MENU);
                 }
